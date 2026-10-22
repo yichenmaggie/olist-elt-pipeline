@@ -1,0 +1,23 @@
+# Raw data (not redistributed, see README for the Kaggle link)
+data/
+
+# Secrets and local config
+.env
+profiles.yml
+
+# dbt artifacts
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+
+# Spark local artifacts
+spark-warehouse/
+metastore_db/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+.DS_Store
