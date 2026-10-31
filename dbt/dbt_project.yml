@@ -1,0 +1,13 @@
+name: olist_elt
+version: '1.0.0'
+profile: olist_elt
+
+
+model-paths: ["models"]
+
+
+models:
+ olist_elt:
+   staging:
+     # Staging models are cheap 1:1 views over RAW.
+     +materialized: view

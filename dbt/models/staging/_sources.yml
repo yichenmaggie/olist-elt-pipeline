@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: olist
+    description: Raw Olist CSVs loaded into Snowflake by snowflake/load_raw.sql.
+    database: OLIST
+    schema: RAW
+    tables:
+      - name: raw_customers
+      - name: raw_orders
+      - name: raw_order_items
+      - name: raw_order_payments
