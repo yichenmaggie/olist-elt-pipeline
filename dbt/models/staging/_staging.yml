@@ -1,0 +1,75 @@
+version: 2
+
+models:
+  - name: stg_olist__customers
+    description: One row per customer_id. In Olist, customer_id is generated per order, so one person can have several customer_ids.
+    columns:
+      - name: customer_id
+        description: Primary key. One id per order.
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_unique_id
+        description: Identifies the real person across orders. Not unique by design.
+        data_tests:
+          - not_null
+
+  - name: stg_olist__orders
+    description: One row per order.
+    columns:
+      - name: order_id
+        description: Primary key.
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: Foreign key to stg_olist__customers.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist__customers')
+                field: customer_id
+      - name: status
+        description: Order lifecycle status.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [delivered, shipped, canceled, unavailable, invoiced, processing, created, approved]
+
+  - name: stg_olist__order_items
+    description: One row per item within an order. The key is (order_id, order_item_id).
+    columns:
+      - name: order_id
+        description: Foreign key to stg_olist__orders.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist__orders')
+                field: order_id
+      - name: order_item_id
+        description: Position of the item within the order.
+        data_tests:
+          - not_null
+
+  - name: stg_olist__order_payments
+    description: One row per payment. The key is (order_id, payment_sequential).
+    columns:
+      - name: order_id
+        description: Foreign key to stg_olist__orders.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_olist__orders')
+                field: order_id
+      - name: payment_type
+        description: How the customer paid.
+        data_tests:
+          - accepted_values:
+              arguments:
+                # not_defined is left out on purpose: 3 known bad rows should warn, not fail.
+                values: [credit_card, boleto, voucher, debit_card]
+              config:
+                severity: warn
