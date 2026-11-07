@@ -39,6 +39,12 @@ models:
 
   - name: stg_olist__order_items
     description: One row per item within an order. The key is (order_id, order_item_id).
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - order_id
+              - order_item_id
     columns:
       - name: order_id
         description: Foreign key to stg_olist__orders.
@@ -55,6 +61,12 @@ models:
 
   - name: stg_olist__order_payments
     description: One row per payment. The key is (order_id, payment_sequential).
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - order_id
+              - payment_sequential
     columns:
       - name: order_id
         description: Foreign key to stg_olist__orders.
